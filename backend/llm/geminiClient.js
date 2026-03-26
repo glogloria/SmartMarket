@@ -1,3 +1,5 @@
+// Loads API key and initializes Gemini client
+
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
@@ -10,13 +12,13 @@ const ai = new GoogleGenAI({
 
 console.log("Loaded key:", process.env.GEMINI_API_KEY);
 
-
-async function main() {
+// Call function to run prompts
+export async function runLLM(prompt) {
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: "Explain how AI works in a few words",
+    contents: prompt,
   });
-  console.log(response.text);
-}
 
-main();
+  return response.text();
+  
+}
