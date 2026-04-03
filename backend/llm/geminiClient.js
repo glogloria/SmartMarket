@@ -19,6 +19,9 @@ export async function runLLM(prompt) {
     contents: prompt,
   });
 
-  return response.text();
-  
+  // The SDK returns text as a property, not a function
+  if (typeof response.text === "function") {
+    return await response.text();
+  }
+  return response.text || "";
 }
