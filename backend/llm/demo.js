@@ -2,6 +2,7 @@
 // Run with: node backend/llm/demo.js
 
 import { processQuery, getQuickMetric } from "./prompts/queryPrompt.js";
+import { processProductQuery } from "./prompts/productPrompt.js";
 
 async function runDemo() {
   console.log("=== SmartMarket Query Demo ===\n");
@@ -14,10 +15,9 @@ async function runDemo() {
 
   console.log("\n--- Processing Natural Language Queries ---");
   
-  // Example queries
+  // Example queries for queryPrompt
   const queries = [
     "Why is waste higher this week?",
-    "Which product category has the most waste?",
     "What's the relationship between storage temperature and spoilage?"
   ];
 
@@ -26,6 +26,21 @@ async function runDemo() {
     const response = await processQuery(query);
     console.log(`Response:\n${response}\n`);
   }
+
+
+  // Example queries for productPrompt
+  const productQueries = [
+    "Why were so many bananas wasted last month?",
+    "How can we reduce waste for dairy products?",
+  ];
+
+  for (const query of productQueries) {
+    console.log(`\nProduct Query: "${query}"`);
+    const response = await processProductQuery(query);
+    console.log(`Response:\n${response}\n`);
+  }
+
+
 }
 
 runDemo().catch(console.error);
