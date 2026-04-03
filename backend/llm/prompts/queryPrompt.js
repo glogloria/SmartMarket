@@ -35,7 +35,7 @@ function loadData() {
     const wasteFile = fs.readFileSync("./data/perishable_goods_management.csv", "utf-8");
     wasteData = parseCSV(wasteFile);
 
-    console.log(`✓ Loaded ${wasteData.length} waste records`);
+    console.log(`✓ Loaded ${wasteData.length} waste records for queryPrompt`);
   } catch (error) {
     console.error("Error loading data:", error);
   }
