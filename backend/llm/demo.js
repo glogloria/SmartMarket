@@ -3,6 +3,7 @@
 
 import { processQuery, getQuickMetric } from "./prompts/queryPrompt.js";
 import { processProductQuery } from "./prompts/productPrompt.js";
+import { processCategoryQuery } from "./prompts/categoryPrompt.js";
 
 async function runDemo() {
   console.log("=== SmartMarket Query Demo ===\n");
@@ -18,7 +19,7 @@ async function runDemo() {
   // Example queries for queryPrompt
   const queries = [
     "Why is waste higher this week?",
-    "What's the relationship between storage temperature and spoilage?"
+    "What storage conditions lead to more spoilage?"
   ];
 
   for (const query of queries) {
@@ -40,6 +41,17 @@ async function runDemo() {
     console.log(`Response:\n${response}\n`);
   }
 
+  //Example queries for categoryPrompt
+  const categoryQueries = [
+    "Which region has the highest waste percentage?",
+    "How does waste differ between refrigerated and frozen products?"
+  ];
+
+  for (const query of categoryQueries) {
+    console.log(`\nCategory Query: "${query}"`);
+    const response = await processCategoryQuery(query);
+    console.log(`Response:\n${response}\n`);
+  }
 
 }
 
