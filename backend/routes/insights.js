@@ -3,11 +3,39 @@
 
 import { runLLM } from "../llm/geminiClient.js";
 
+// Import all prompt modules
+import { processCategoryQuery } from "../llm/prompts/categoryPrompt.js";
+import { processProductQuery } from "../llm/prompts/productPrompt.js";
+import { processQuery } from "../llm/prompts/queryPrompt.js";
+import { processStoreQuery } from "../llm/prompts/storeInsightsPrompt.js";
+
 ReadableStreamDefaultController.post("/", async (req, res) => {
-    const storeMetrics = req.body;
+    const { type, query, storeMetrics } = req.body;
 
-    const prompt = storeInsightsPrompt(storeMetrics);
-    const insights = await runLLM(prompt);
+    let prompt;
+    let insights;
 
-    res.json({ insights });
+    try {
+        switch (type) {
+            case "store":
+                prompt = processStoreQuery(storeMetrics);
+                insights = await runLLM(prompt);
+                break;
+            case "category":
+                insights = await processCategoryQuery(query || "Generate insights for categories");
+                break;
+            case "product":
+                insights = await processProductQuery(query || "Generate insights for products");
+                break;
+            case "general":
+            default:
+                insights = await processQuery(query || "Generate general insights");
+                break;
+        }
+
+        res.json({ insights });
+    } catch (error) {
+        console.error("Error generating insights:", error);
+        res.status(500).json({ error: "Failed to generate insights" });
+    }
 });
