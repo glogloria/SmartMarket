@@ -18,8 +18,7 @@ async function runDemo() {
   
   // Example queries for queryPrompt
   const queries = [
-    "Why is waste higher this week?",
-    "What storage conditions lead to more spoilage?"
+    "Why is waste higher this week?"
   ];
 
   for (const query of queries) {
@@ -31,8 +30,7 @@ async function runDemo() {
 
   // Example queries for productPrompt
   const productQueries = [
-    "Why were so many bananas wasted last month?",
-    "How can we reduce waste for dairy products?",
+    "Why were so many bananas wasted last month?"
   ];
 
   for (const query of productQueries) {
@@ -43,13 +41,23 @@ async function runDemo() {
 
   //Example queries for categoryPrompt
   const categoryQueries = [
-    "Which region has the highest waste percentage?",
-    "How does waste differ between refrigerated and frozen products?"
+    "How does waste compare between Bakery and Meat categories?"
   ];
 
   for (const query of categoryQueries) {
     console.log(`\nCategory Query: "${query}"`);
     const response = await processCategoryQuery(query);
+    console.log(`Response:\n${response}\n`);
+  }
+
+  //Example query for storeInsightsPrompt
+  const storeQueries = [
+    "Generate insights for store 004"
+  ];
+
+  for (const query of storeQueries) {
+    console.log(`\nStore Query: "${query}"`);
+    const response = await processQuery(query);
     console.log(`Response:\n${response}\n`);
   }
 
