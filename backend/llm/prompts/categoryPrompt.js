@@ -1,6 +1,6 @@
 // Here are 4 starter categories we can use to prompt but feel free to change/delete/whatever
 
-// Category prompt can prompt information related to categorys
+// Category prompt can prompt information related to item categories
 // i.e "How many units of product were wasted in Bakery?" etc
 
 
@@ -56,7 +56,7 @@ function getDataSummary() {
         .reduce((sum, r) => sum + parseFloat(r.units_wasted || 0), 0)
     }))
     .sort((a, b) => b.waste - a.waste)
-    .slice(0, 3);
+    .slice(0, 5);
 
   return {
     totalRecords,
@@ -76,13 +76,13 @@ function formatDataContext() {
 - Total Records: ${summary.totalRecords}
 - Total Units Wasted: ${summary.totalWaste}
 - Average Waste Percentage: ${summary.avgWastePercent}%
-- Product Categories: ${summary.categories}
+- Item Categories: ${summary.categories}
 
 ## Top Waste Categories:
 ${summary.topWasteCategories.map(c => `- ${c.category}: ${c.waste.toFixed(0)} units wasted`).join("\n")}
 
 ## Data Fields Available:
-- Perishable Goods: product_name, category, units_wasted, waste_pct, spoilage_risk, storage_temp, shelf_life_days, profit, revenue
+- Perishable Goods: product_name, category, store_id, region, units_wasted, waste_pct, spoilage_risk, storage_temp, shelf_life_days, profit, revenue
   `;
 }
 
@@ -97,14 +97,14 @@ You have access to:
 ${formatDataContext()}
 
 Your job is to:
-- Answer questions about waste and spoilage patterns for specific categories (department, region, storage temperature, etc.)
-- Provide data-driven insights and recommendations for specific products
+- Answer questions about waste and spoilage patterns for specific item categories (Bakery, Meat, Pharmaceuticals, etc.)
+- Provide data-driven insights and recommendations for specific categories
 - Differentiate simple metric queries from complex analytical questions
 - Format responses clearly with key findings and recommendations
 
 When answering questions:
 1. If it's a simple metric query (e.g., "total waste in Bakery"), provide a direct answer
-2. If it's analytical (e.g., "why were so many products wasted?"), analyze patterns and provide insights
+2. If it's analytical (e.g., "why were so many Bakery products wasted?"), analyze patterns and provide insights
 3. Always cite relevant data points from the dataset
 4. Suggest actionable recommendations when appropriate`;
 

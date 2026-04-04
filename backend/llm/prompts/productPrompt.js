@@ -45,12 +45,12 @@ function getDataSummary() {
   const totalWaste = wasteData.reduce((sum, record) => sum + parseFloat(record.units_wasted || 0), 0);
   const avgWastePercent = (wasteData.reduce((sum, record) => sum + parseFloat(record.waste_pct || 0), 0) / totalRecords).toFixed(2);
   
-  const categories = [...new Set(wasteData.map(r => r.category))];
-  const topWasteCategories = Array.from(new Set(wasteData.map(r => r.category)))
-    .map(cat => ({
-      category: cat,
+  const products = [...new Set(wasteData.map(r => r.product_name))];
+  const topWasteProducts = Array.from(new Set(wasteData.map(r => r.product_name)))
+    .map(product => ({
+      product: product,
       waste: wasteData
-        .filter(r => r.category === cat)
+        .filter(r => r.product_name === product)
         .reduce((sum, r) => sum + parseFloat(r.units_wasted || 0), 0)
     }))
     .sort((a, b) => b.waste - a.waste)
@@ -60,8 +60,8 @@ function getDataSummary() {
     totalRecords,
     totalWaste: totalWaste.toFixed(2),
     avgWastePercent,
-    categories: categories.length,
-    topWasteCategories
+    products: products.length,
+    topWasteProducts
   };
 }
 
@@ -74,13 +74,13 @@ function formatDataContext() {
 - Total Records: ${summary.totalRecords}
 - Total Units Wasted: ${summary.totalWaste}
 - Average Waste Percentage: ${summary.avgWastePercent}%
-- Product Categories: ${summary.categories}
+- Unique Products: ${summary.products}
 
-## Top Waste Categories:
-${summary.topWasteCategories.map(c => `- ${c.category}: ${c.waste.toFixed(0)} units wasted`).join("\n")}
+## Top Waste Products:
+${summary.topWasteProducts.map(p => `- ${p.product}: ${p.waste.toFixed(0)} units wasted`).join("\n")}
 
 ## Data Fields Available:
-- Perishable Goods: product_name, category, units_wasted, waste_pct, spoilage_risk, storage_temp, shelf_life_days, profit, revenue
+- Perishable Goods: product_name, product_id, category, store_id, region, units_wasted, waste_pct, spoilage_risk, storage_temp, shelf_life_days, profit, revenue
   `;
 }
 
@@ -95,14 +95,14 @@ You have access to:
 ${formatDataContext()}
 
 Your job is to:
-- Answer product specific questions about waste and spoilage patterns
+- Answer questions about waste and spoilage patterns for specific products (product_name, product_id, etc.)
 - Provide data-driven insights and recommendations for specific products
 - Differentiate simple metric queries from complex analytical questions
 - Format responses clearly with key findings and recommendations
 
 When answering questions:
-1. If it's a simple metric query (e.g., "total waste"), provide a direct answer
-2. If it's analytical (e.g., "why were so many products wasted?"), analyze patterns and provide insights
+1. If it's a simple metric query (e.g., "total waste for Donuts"), provide a direct answer
+2. If it's analytical (e.g., "why were so many Donuts wasted?"), analyze patterns and provide insights
 3. Always cite relevant data points from the dataset
 4. Suggest actionable recommendations when appropriate`;
 
