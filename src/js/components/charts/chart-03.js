@@ -5,42 +5,49 @@ const chart03 = () => {
   const chartThreeOptions = {
     series: [
       {
-        name: "Sales",
+        name: "Revenue",
+        type: "area",
         data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
       },
       {
-        name: "Revenue",
+        name: "Waste",
+        type: "column",
         data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
       },
     ],
     legend: {
-      show: false,
+      show: true,
       position: "top",
       horizontalAlign: "left",
     },
-    colors: ["#465FFF", "#9CB9FF"],
+    colors: ["#465FFF", "#F97316"],
     chart: {
       fontFamily: "Outfit, sans-serif",
       height: 310,
-      type: "area",
+      type: "line",
       toolbar: {
         show: false,
       },
     },
-    fill: {
-      gradient: {
-        enabled: true,
-        opacityFrom: 0.55,
-        opacityTo: 0,
+    plotOptions: {
+      bar: {
+        columnWidth: "45%",
       },
+    },
+    fill: {
+      type: ["solid", "solid"],
+      opacity: [0.15, 0.85],
     },
     stroke: {
       curve: "straight",
-      width: ["2", "2"],
+      width: [3, 2],
     },
 
     markers: {
-      size: 0,
+      size: 4,
+      hover: {
+        sizeOffset: 2,
+      },
     },
     labels: {
       show: false,
@@ -62,8 +69,15 @@ const chart03 = () => {
       enabled: false,
     },
     tooltip: {
+      shared: true,
+      intersect: false,
       x: {
         format: "dd MMM yyyy",
+      },
+      y: {
+        formatter: function (val, { seriesIndex }) {
+          return seriesIndex === 0 ? "$" + val + "k" : val + " lbs";
+        },
       },
     },
     xaxis: {
@@ -107,6 +121,40 @@ const chart03 = () => {
       chartThreeOptions,
     );
     chartThree.render();
+
+    const allRevenue = [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235];
+    const allWaste = [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140];
+    const allMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    // Listen for filter events from the toggle buttons
+    document.addEventListener("chartThreeFilter", (e) => {
+      const filter = e.detail;
+      if (filter === "overview") {
+        chartThree.showSeries("Revenue");
+        chartThree.showSeries("Waste");
+      } else if (filter === "revenue") {
+        chartThree.showSeries("Revenue");
+        chartThree.hideSeries("Waste");
+      } else if (filter === "waste") {
+        chartThree.hideSeries("Revenue");
+        chartThree.showSeries("Waste");
+      }
+    });
+
+    // Listen for month selection changes
+    document.addEventListener("chartThreeMonths", (e) => {
+      const indices = e.detail;
+      const filteredMonths = indices.map(i => allMonths[i]);
+      const filteredRevenue = indices.map(i => allRevenue[i]);
+      const filteredWaste = indices.map(i => allWaste[i]);
+      chartThree.updateOptions({
+        xaxis: { categories: filteredMonths },
+      });
+      chartThree.updateSeries([
+        { name: "Revenue", type: "area", data: filteredRevenue },
+        { name: "Waste", type: "column", data: filteredWaste },
+      ]);
+    });
   }
 };
 

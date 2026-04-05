@@ -5,8 +5,8 @@ const chart01 = () => {
   const chartOneOptions = {
     series: [
       {
-        name: "Sales",
-        data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
+        name: "Revenue",
+        data: [320, 450, 290, 360, 410, 380, 500, 420, 460, 510, 480, 525],
       },
     ],
     colors: ["#465fff"],
@@ -36,18 +36,18 @@ const chart01 = () => {
     },
     xaxis: {
       categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        "Dairy",
+        "Produce",
+        "Bakery",
+        "Deli",
+        "Frozen",
+        "Beverages",
+        "Meat",
+        "Snacks",
+        "Household",
+        "Health",
+        "Seafood",
+        "Prepared",
       ],
       axisBorder: {
         show: false,
@@ -86,7 +86,7 @@ const chart01 = () => {
       },
       y: {
         formatter: function (val) {
-          return val;
+          return "$" + val + "k";
         },
       },
     },

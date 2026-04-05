@@ -48,7 +48,7 @@ const chart02 = () => {
     stroke: {
       lineCap: "round",
     },
-    labels: ["Progress"],
+    labels: ["Waste reduction"],
   };
 
   const chartSelector = document.querySelectorAll("#chartTwo");

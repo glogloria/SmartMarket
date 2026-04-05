@@ -4,66 +4,80 @@
   <div class="mb-6 flex flex-col gap-5 sm:flex-row sm:justify-between">
     <div class="w-full">
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-        Statistics
+          Revenue vs Waste Trend
       </h3>
       <p class="text-theme-sm mt-1 text-gray-500 dark:text-gray-400">
-        Target you’ve set for each month
+          Compare monthly grocery earnings and food waste levels.
       </p>
     </div>
-
     <div class="flex w-full items-start gap-3 sm:justify-end">
       <div
         x-data="{selected: 'overview'}"
         class="inline-flex w-fit items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900"
       >
         <button
-          @click="selected = 'overview'"
+          @click="selected = 'overview'; document.dispatchEvent(new CustomEvent('chartThreeFilter', {detail: 'overview'}))"
           :class="selected === 'overview' ? 'shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
           class="text-theme-sm rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white"
         >
           Overview
         </button>
         <button
-          @click="selected = 'sales'"
-          :class="selected === 'sales' ? 'shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
-          class="text-theme-sm rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white"
-        >
-          Sales
-        </button>
-        <button
-          @click="selected = 'revenue'"
+          @click="selected = 'revenue'; document.dispatchEvent(new CustomEvent('chartThreeFilter', {detail: 'revenue'}))"
           :class="selected === 'revenue' ? 'shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
           class="text-theme-sm rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white"
         >
           Revenue
         </button>
+        <button
+          @click="selected = 'waste'; document.dispatchEvent(new CustomEvent('chartThreeFilter', {detail: 'waste'}))"
+          :class="selected === 'waste' ? 'shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'"
+          class="text-theme-sm rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white"
+        >
+          Waste
+        </button>
       </div>
 
-      <div class="relative max-w-41">
-        <input
-          class="datepicker text-theme-sm shadow-theme-xs h-10 w-full max-w-11 rounded-lg border border-gray-200 bg-white py-2.5 pr-4 pl-[34px] font-medium text-gray-700 focus:ring-0 focus:outline-hidden focus-visible:outline-hidden xl:max-w-fit xl:pl-11 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
-          placeholder="Select dates"
-          data-class="flatpickr-right"
-          readonly="readonly"
-        />
-        <div
-          class="pointer-events-none absolute inset-0 right-auto left-3 flex items-center"
+      <div x-data="{ open: false, selected: [0,1,2,3,4,5,6,7,8,9,10,11], months: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], toggleAll() { if (this.selected.length === 12) { this.selected = [] } else { this.selected = [0,1,2,3,4,5,6,7,8,9,10,11] }; document.dispatchEvent(new CustomEvent('chartThreeMonths', {detail: [...this.selected]})) }, toggle(i) { if(this.selected.includes(i)) { this.selected = this.selected.filter(s => s !== i) } else { this.selected.push(i); this.selected.sort((a,b) => a-b) }; document.dispatchEvent(new CustomEvent('chartThreeMonths', {detail: [...this.selected]})) }, label() { if (this.selected.length === 0) return 'No Months'; if (this.selected.length === 12) return 'All Months'; if (this.selected.length <= 3) return this.selected.map(i => this.months[i]).join(', '); return this.selected.length + ' Months'; } }" class="relative">
+        <button
+          @click="open = !open"
+          class="text-theme-sm shadow-theme-xs h-10 rounded-lg border border-gray-200 bg-white py-2.5 px-3 font-medium text-gray-700 focus:ring-0 focus:outline-hidden dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 flex items-center gap-2 whitespace-nowrap"
         >
-          <svg
-            class="fill-gray-700 dark:fill-gray-400"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M6.66683 1.54199C7.08104 1.54199 7.41683 1.87778 7.41683 2.29199V3.00033H12.5835V2.29199C12.5835 1.87778 12.9193 1.54199 13.3335 1.54199C13.7477 1.54199 14.0835 1.87778 14.0835 2.29199V3.00033L15.4168 3.00033C16.5214 3.00033 17.4168 3.89576 17.4168 5.00033V7.50033V15.8337C17.4168 16.9382 16.5214 17.8337 15.4168 17.8337H4.5835C3.47893 17.8337 2.5835 16.9382 2.5835 15.8337V7.50033V5.00033C2.5835 3.89576 3.47893 3.00033 4.5835 3.00033L5.91683 3.00033V2.29199C5.91683 1.87778 6.25262 1.54199 6.66683 1.54199ZM6.66683 4.50033H4.5835C4.30735 4.50033 4.0835 4.72418 4.0835 5.00033V6.75033H15.9168V5.00033C15.9168 4.72418 15.693 4.50033 15.4168 4.50033H13.3335H6.66683ZM15.9168 8.25033H4.0835V15.8337C4.0835 16.1098 4.30735 16.3337 4.5835 16.3337H15.4168C15.693 16.3337 15.9168 16.1098 15.9168 15.8337V8.25033Z"
-              fill=""
-            />
+          <svg class="fill-gray-700 dark:fill-gray-400 shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.66683 1.54199C7.08104 1.54199 7.41683 1.87778 7.41683 2.29199V3.00033H12.5835V2.29199C12.5835 1.87778 12.9193 1.54199 13.3335 1.54199C13.7477 1.54199 14.0835 1.87778 14.0835 2.29199V3.00033L15.4168 3.00033C16.5214 3.00033 17.4168 3.89576 17.4168 5.00033V7.50033V15.8337C17.4168 16.9382 16.5214 17.8337 15.4168 17.8337H4.5835C3.47893 17.8337 2.5835 16.9382 2.5835 15.8337V7.50033V5.00033C2.5835 3.89576 3.47893 3.00033 4.5835 3.00033L5.91683 3.00033V2.29199C5.91683 1.87778 6.25262 1.54199 6.66683 1.54199ZM6.66683 4.50033H4.5835C4.30735 4.50033 4.0835 4.72418 4.0835 5.00033V6.75033H15.9168V5.00033C15.9168 4.72418 15.693 4.50033 15.4168 4.50033H13.3335H6.66683ZM15.9168 8.25033H4.0835V15.8337C4.0835 16.1098 4.30735 16.3337 4.5835 16.3337H15.4168C15.693 16.3337 15.9168 16.1098 15.9168 15.8337V8.25033Z" fill="" />
           </svg>
+          <span x-text="label()">All Months</span>
+          <svg class="shrink-0 ml-1" :class="open ? 'rotate-180' : ''" width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div
+          x-show="open"
+          @click.outside="open = false"
+          x-transition
+          class="absolute right-0 z-50 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800 py-1 max-h-72 overflow-y-auto"
+        >
+          <label class="flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-gray-700 cursor-pointer text-theme-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <input
+              type="checkbox"
+              :checked="selected.length === 12"
+              @change="toggleAll()"
+              class="rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700"
+            />
+            <span>Select All</span>
+          </label>
+          <template x-for="(m, i) in months" :key="i">
+            <label class="flex items-center gap-2 px-3 py-1.5 cursor-pointer text-theme-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+              <input
+                type="checkbox"
+                :value="i"
+                :checked="selected.includes(i)"
+                @change="toggle(i)"
+                class="rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-700"
+              />
+              <span x-text="m"></span>
+            </label>
+          </template>
         </div>
       </div>
     </div>
